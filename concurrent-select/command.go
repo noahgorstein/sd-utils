@@ -43,7 +43,7 @@ func (o Options) Run() error {
 		close(results)
 	}()
 
-	err = printResults(results, o.Format)
+	err = printResults(results, o.Format, o.PrintQuery, q)
 	if err != nil {
 		return err
 	}
@@ -110,19 +110,19 @@ type run struct {
 }
 
 // printResults prints results from the results chan in the specified format.
-func printResults(results chan run, format string) error {
+func printResults(results chan run, format string, printQuery bool, query string) error {
 	if format == "table" {
-		printTable(results)
+		printTable(results, printQuery, query)
 		return nil
 	}
-	err := printCSV(results)
+	err := printCSV(results, printQuery, query)
 	if err != nil {
 		return err
 	}
 	return nil
 }
 
-func printTable(results chan run) {
+func printTable(results chan run, printQuery bool, query string) {
 	headerFmt := color.New(color.FgGreen, color.Underline).SprintfFunc()
 	tbl := table.New("Start Time", "Elapsed Time", "Status Code", "Error")
 	tbl.WithHeaderFormatter(headerFmt)
@@ -138,10 +138,15 @@ func printTable(results chan run) {
 
 		tbl.AddRow(startTime, elapsedTime, statusCode, errorMsg)
 	}
+  if printQuery {
+    fmt.Println("Query executed: ")
+    fmt.Println(query)
+    fmt.Println()
+  }
 	tbl.Print()
 }
 
-func printCSV(results chan run) error {
+func printCSV(results chan run, printQuery bool, query string) error {
 	w := csv.NewWriter(os.Stdout)
 
 	var b []byte
@@ -184,6 +189,12 @@ func printCSV(results chan run) error {
 	if err := w.Error(); err != nil {
 		return err
 	}
+
+  if printQuery {
+    fmt.Println("Query executed: ")
+    fmt.Println(query)
+    fmt.Println()
+  }
 
 	fmt.Println(string(buf.Bytes()))
 	return nil

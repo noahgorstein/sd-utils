@@ -28,7 +28,8 @@ Flags:
   -t, --timeout=INT               Timeout in milliseconds for the provided query.
   -r, --reasoning                 Enable reasoning for the provided query.
   -c, --concurrent-queries=INT    Number of concurrent queries to execute.
-      --format="table"            Result format of benchmark results. Valid formats are 'table' or 'csv'
+      --format="table"            Result format of benchmark results. Valid formats are 'table' or 'csv'.
+      --print-query               Print the query executed before the results.
 
 Query Flags
   -q, --query=STRING    Name of stored query or query string to execute.

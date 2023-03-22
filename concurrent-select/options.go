@@ -17,4 +17,5 @@ type Options struct {
 
 	NumConcurrentQueries int    `short:"c" name:"concurrent-queries" required:"" help:"Number of concurrent queries to execute."`
 	Format               string `name:"format" enum:"table,csv" default:"table" help:"Result format of benchmark results. Valid formats are 'table' or 'csv'."`
+	PrintQuery           bool   `name:"print-query" help:"Print the query executed before the results."`
 }
